@@ -42,17 +42,17 @@ until [[ $user =~ ^[a-zA-Z0-9_]+$ && ${user_EXISTS} == '0' ]]; do
 			exit 1
 		fi
 	done
-uuid=$(cat /proc/sys/kernel/random/uuid)
+#uuid=$(cat /proc/sys/kernel/random/uuid)
 read -p "Expired (Days) : " masaaktif
 hariini=`date -d "0 days" +"%Y-%m-%d"`
 exp=`date -d "$masaaktif days" +"%Y-%m-%d"`
 sed -i '/#vless$/a\#### '"$user $exp"'\
-},{"id": "'""$uuid""'","email": "'""$user""'"' /etc/xray/config.json
+},{"id": "'""$user""'","email": "'""$user""'"' /etc/xray/config.json
 sed -i '/#vlessgrpc$/a\#### '"$user $exp"'\
-},{"id": "'""$uuid""'","email": "'""$user""'"' /etc/xray/config.json
-xrayvless1="vless://${uuid}@${domain}:$tls?path=/xrayws&security=tls&encryption=none&type=ws#${user}"
-xrayvless2="vless://${uuid}@${domain}:$nontls?path=/xrayws&encryption=none&type=ws#${user}"
-xrayvless3="vless://${uuid}@${domain}:$tls?mode=gun&security=tls&encryption=none&type=grpc&serviceName=vless-grpc&sni=${domain}#${user}"
+},{"id": "'""$user""'","email": "'""$user""'"' /etc/xray/config.json
+xrayvless1="vless://${user}@${domain}:$tls?path=/$user&security=tls&encryption=none&type=ws#${user}"
+xrayvless2="vless://${user}@${domain}:$nontls?path=/$user&encryption=none&type=ws#${user}"
+xrayvless3="vless://${user}@${domain}:$tls?mode=gun&security=tls&encryption=none&type=grpc&serviceName=vless-grpc&sni=${domain}#${user}"
 systemctl restart xray.service
 service cron restart
 clear
@@ -63,10 +63,10 @@ echo -e "IP/Host     : ${MYIP}"
 echo -e "Address     : ${domain}"
 echo -e "Port TLS    : $tls"
 echo -e "Port No TLS : $nontls"
-echo -e "User ID     : ${uuid}"
+echo -e "User ID     : ${user}"
 echo -e "Encryption  : none"
 echo -e "Network     : ws"
-echo -e "Path        : /xrayws"
+echo -e "Path        : /$user"
 echo -e "Path GRPC   : vless-grpc "
 echo -e "Created     : $hariini"
 echo -e "Expired     : $exp"
@@ -77,4 +77,4 @@ echo -e "Link No TLS : ${xrayvless2}"
 echo -e "========================="
 echo -e "Link GRPC   : ${xrayvless3}"
 echo -e "========================="
-echo "Scipt Mod By LIZ"
+echo "Scipt Mod By Supri"
